@@ -1,0 +1,37 @@
+{
+  "name": "astro-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for astrological natal chart calculations",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "astro-mcp-server": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "test": "node dist/test.js"
+  },
+  "keywords": [
+    "astrology",
+    "mcp",
+    "natal-chart",
+    "horoscope"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.1",
+    "@swisseph/node": "^1.0.4",
+    "luxon": "^3.7.2",
+    "node-geocoder": "^4.4.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.7.1",
+    "@types/node": "^22.10.2",
+    "@types/node-geocoder": "^4.2.6",
+    "typescript": "^5.7.2"
+  }
+}
