@@ -94,12 +94,9 @@ Calculate a complete natal chart based on birth data.
   "planets": [
     {
       "name": "Sun",
-      "key": "sun",
-      "zodiacSign": "Taurus",
-      "zodiacSignKey": "taurus",
-      "degree": 84.6567,
-      "degreeFormatted": "84° 39' 24''",
-      "degreeInSign": "24° 39' 24''",
+      "sign": "Taurus",
+      "degree": "24° 39' 24\"",
+      "longitude": 84.6567,
       "house": 9,
       "isRetrograde": false
     }
@@ -107,21 +104,16 @@ Calculate a complete natal chart based on birth data.
   "houses": [
     {
       "number": 1,
-      "label": "1st House",
       "sign": "Virgo",
-      "signKey": "virgo",
-      "cuspDegree": 169.4606,
-      "cuspDegreeFormatted": "169° 27' 38''"
+      "degree": "19° 27' 38\"",
+      "cuspDegree": 169.4606
     }
   ],
   "aspects": [
     {
       "point1": "Sun",
-      "point1Key": "sun",
       "point2": "Moon",
-      "point2Key": "moon",
       "aspect": "Trine",
-      "aspectKey": "trine",
       "aspectLevel": "Major",
       "orb": 5.85,
       "orbUsed": 7
@@ -129,32 +121,38 @@ Calculate a complete natal chart based on birth data.
   ],
   "chartAngles": {
     "ascendant": {
-      "degree": 169.4606,
-      "degreeFormatted": "169° 27' 38''",
       "sign": "Virgo",
-      "signKey": "virgo"
+      "degree": "19° 27' 38\"",
+      "longitude": 169.4606
     },
     "midheaven": {
-      "degree": 77.7759,
-      "degreeFormatted": "77° 46' 33''",
       "sign": "Gemini",
-      "signKey": "gemini"
+      "degree": "17° 46' 33\"",
+      "longitude": 77.7759
     },
     "descendant": {
-      "degree": 349.4606,
-      "sign": "Pisces"
+      "sign": "Pisces",
+      "degree": "19° 27' 38\"",
+      "longitude": 349.4606
     },
     "imumCoeli": {
-      "degree": 257.7759,
-      "sign": "Sagittarius"
+      "sign": "Sagittarius",
+      "degree": "17° 46' 33\"",
+      "longitude": 257.7759
     }
   },
   "sunSign": "Taurus",
   "birthData": {
-    "datetime": {...},
+    "datetime": {
+      "year": 1990,
+      "month": 5,
+      "day": 15,
+      "hour": 14,
+      "minute": 30
+    },
     "location": "New York, NY, USA",
     "latitude": 40.7128,
-    "longitude": -74.0060,
+    "longitude": -74.006,
     "houseSystem": "Placidus"
   }
 }
@@ -287,7 +285,20 @@ Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North 
 - Imum Coeli (IC) - Opposite Midheaven
 
 ### Aspects
-Aspect calculation is available as an enhancement. The current implementation provides all planetary positions, allowing for custom aspect calculation based on your preferred orbs and aspect types.
+Automatically calculates aspects between all planets with configurable orbs:
+
+**Major Aspects:**
+- Conjunction (0°, orb: 10°)
+- Sextile (60°, orb: 6°)
+- Square (90°, orb: 8°)
+- Trine (120°, orb: 8°)
+- Opposition (180°, orb: 10°)
+
+**Minor Aspects:**
+- Semi-Sextile (30°, orb: 3°)
+- Semi-Square (45°, orb: 3°)
+- Sesquiquadrate (135°, orb: 3°)
+- Quincunx (150°, orb: 3°)
 
 ## License
 
