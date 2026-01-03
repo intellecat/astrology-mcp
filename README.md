@@ -302,7 +302,7 @@ Automatically calculates aspects between all planets with configurable orbs:
 
 ## License
 
-MIT
+AGPL-3.0
 
 ## Migration to Swiss Ephemeris
 

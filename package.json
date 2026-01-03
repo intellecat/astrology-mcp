@@ -20,7 +20,7 @@
     "horoscope"
   ],
   "author": "",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.1",
     "@swisseph/node": "^1.0.4",
