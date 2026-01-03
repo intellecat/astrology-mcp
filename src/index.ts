@@ -20,6 +20,7 @@ import {
   CalendarType,
 } from "@swisseph/node";
 import { DateTime as LuxonDateTime } from "luxon";
+import { find as findTimezone } from "geo-tz";
 import NodeGeocoder from "node-geocoder";
 
 // Initialize geocoder
@@ -105,37 +106,103 @@ function calculateHousePositionForPlanet(
 }
 
 /**
- * Convert local time to UTC using timezone information from coordinates
- * Uses IANA timezone database via Luxon
+ * Calculate aspects between planets
  */
-async function convertLocalTimeToUTC(
+function calculateAspects(planets: any[]): any[] {
+  const aspects: any[] = [];
+
+  // Define aspect types with their angles and orbs
+  const aspectTypes = [
+    { name: "Conjunction", key: "conjunction", angle: 0, orb: 10, level: "major" },
+    { name: "Sextile", key: "sextile", angle: 60, orb: 6, level: "major" },
+    { name: "Square", key: "square", angle: 90, orb: 8, level: "major" },
+    { name: "Trine", key: "trine", angle: 120, orb: 8, level: "major" },
+    { name: "Opposition", key: "opposition", angle: 180, orb: 10, level: "major" },
+    { name: "Semi-Sextile", key: "semisextile", angle: 30, orb: 3, level: "minor" },
+    { name: "Semi-Square", key: "semisquare", angle: 45, orb: 3, level: "minor" },
+    { name: "Sesquiquadrate", key: "sesquiquadrate", angle: 135, orb: 3, level: "minor" },
+    { name: "Quincunx", key: "quincunx", angle: 150, orb: 3, level: "minor" },
+  ];
+
+  // Calculate aspects between all planet pairs
+  for (let i = 0; i < planets.length; i++) {
+    for (let j = i + 1; j < planets.length; j++) {
+      const planet1 = planets[i];
+      const planet2 = planets[j];
+
+      // Calculate the angular distance between two planets
+      let diff = Math.abs(planet1.longitude - planet2.longitude);
+
+      // Normalize to 0-180 degrees (aspects are symmetric)
+      if (diff > 180) {
+        diff = 360 - diff;
+      }
+
+      // Check each aspect type
+      for (const aspectType of aspectTypes) {
+        const orb = Math.abs(diff - aspectType.angle);
+
+        if (orb <= aspectType.orb) {
+          aspects.push({
+            point1: planet1.name,
+            point2: planet2.name,
+            aspect: aspectType.name,
+            aspectLevel: aspectType.level,
+            orb: parseFloat(orb.toFixed(2)),
+            orbUsed: aspectType.orb,
+          });
+        }
+      }
+    }
+  }
+
+  return aspects;
+}
+
+/**
+ * Convert local time to UTC using timezone information from coordinates
+ * Uses geo-tz to get IANA timezone and Luxon for accurate conversion
+ * Handles historical DST rules automatically
+ */
+function convertLocalTimeToUTC(
   datetime: DateTime,
   latitude: number,
   longitude: number
-): Promise<{ year: number; month: number; day: number; hour: number }> {
+): number {
   try {
-    // For now, we'll use a simplified approach with timezone offset
-    // In production, you might want to use a more sophisticated timezone lookup
-    // based on coordinates, or require the user to provide timezone
+    // Get IANA timezone from coordinates (e.g., "Asia/Shanghai", "America/New_York")
+    const timezone = findTimezone(latitude, longitude)[0];
 
-    // Simple timezone offset calculation based on longitude
-    // This is approximate - in production use a proper timezone library
-    const timezoneOffset = Math.round(longitude / 15);
+    if (!timezone) {
+      throw new Error(
+        `Could not determine timezone for coordinates: ${latitude}, ${longitude}`
+      );
+    }
 
-    const utcDate = LuxonDateTime.utc(
-      datetime.year,
-      datetime.month, // Now using 1-12 directly (Luxon also uses 1-12)
-      datetime.day,
-      datetime.hour,
-      datetime.minute
-    ).minus({ hours: timezoneOffset });
+    // Create datetime in local timezone
+    const localTime = LuxonDateTime.fromObject(
+      {
+        year: datetime.year,
+        month: datetime.month,
+        day: datetime.day,
+        hour: datetime.hour,
+        minute: datetime.minute,
+      },
+      { zone: timezone }
+    );
 
-    return {
-      year: utcDate.year,
-      month: utcDate.month, // 1-12
-      day: utcDate.day,
-      hour: utcDate.hour + utcDate.minute / 60,
-    };
+    // Validate the datetime
+    if (!localTime.isValid) {
+      throw new Error(
+        `Invalid datetime: ${localTime.invalidReason}. Check that the date and time are valid for timezone ${timezone}.`
+      );
+    }
+
+    // Convert to UTC
+    const utcTime = localTime.toUTC();
+
+    // Return hour as decimal for Swiss Ephemeris (e.g., 9:30 = 9.5)
+    return utcTime.hour + utcTime.minute / 60;
   } catch (error) {
     throw new Error(
       `Failed to convert local time to UTC: ${error instanceof Error ? error.message : "Unknown error"}`
@@ -202,42 +269,33 @@ const GetCoordinatesArgsSchema = z.object({
 // Output schemas for structured responses
 const PlanetSchema = z.object({
   name: z.string(),
-  key: z.string(),
-  zodiacSign: z.string(),
-  zodiacSignKey: z.string(),
-  degree: z.number(),
-  degreeFormatted: z.string(),
-  degreeInSign: z.string(),
+  sign: z.string(),
+  degree: z.string(),
+  longitude: z.number(),
   house: z.number(),
   isRetrograde: z.boolean(),
 });
 
 const HouseSchema = z.object({
   number: z.number(),
-  label: z.string(),
   sign: z.string(),
-  signKey: z.string(),
+  degree: z.string(),
   cuspDegree: z.number(),
-  cuspDegreeFormatted: z.string(),
 });
 
 const AspectSchema = z.object({
   point1: z.string(),
-  point1Key: z.string(),
   point2: z.string(),
-  point2Key: z.string(),
   aspect: z.string(),
-  aspectKey: z.string(),
   aspectLevel: z.string(),
   orb: z.number(),
   orbUsed: z.number(),
 });
 
 const ChartAngleSchema = z.object({
-  degree: z.number(),
-  degreeFormatted: z.string().optional(),
   sign: z.string(),
-  signKey: z.string().optional(),
+  degree: z.string(),
+  longitude: z.number(),
 });
 
 const NatalChartOutputSchema = z.object({
@@ -324,11 +382,9 @@ async function calculateNatalChart(
   houseSystem: string = "Placidus"
 ) {
   try {
-    // Convert local time to UTC (Swiss Ephemeris requires UTC)
-    // For now, using a simplified approach based on longitude
-    // TODO: Consider adding timezone as an explicit parameter
-    const timezoneOffset = Math.round(longitude / 15);
-    const hourUTC = datetime.hour + timezoneOffset + datetime.minute / 60;
+    // Convert local time to UTC using geo-tz + Luxon
+    // This automatically handles historical DST rules for accurate calculations
+    const hourUTC = convertLocalTimeToUTC(datetime, latitude, longitude);
 
     // Calculate Julian Day
     // Note: datetime.month is now 1-12, Swiss Ephemeris also uses 1-12
@@ -368,7 +424,8 @@ async function calculateNatalChart(
       { id: Planet.Uranus, name: "Uranus", key: "uranus" },
       { id: Planet.Neptune, name: "Neptune", key: "neptune" },
       { id: Planet.Pluto, name: "Pluto", key: "pluto" },
-      { id: LunarPoint.MeanNode, name: "North Node", key: "northnode" },
+      { id: LunarPoint.MeanNode, name: "Mean Node", key: "meannode" },
+      { id: LunarPoint.TrueNode, name: "True Node", key: "truenode" },
       { id: Asteroid.Chiron, name: "Chiron", key: "chiron" },
     ];
 
@@ -421,12 +478,9 @@ function formatNatalChartData(chartData: {
     // Format planets information
     const planets = chartData.planets.map((planet) => ({
       name: planet.name,
-      key: planet.key,
-      zodiacSign: planet.zodiacSign,
-      zodiacSignKey: planet.zodiacSignKey,
-      degree: planet.longitude,
-      degreeFormatted: formatZodiacDegree(planet.longitude),
-      degreeInSign: formatZodiacDegree(planet.degreeInSign),
+      sign: planet.zodiacSign,
+      degree: formatZodiacDegree(planet.degreeInSign),
+      longitude: parseFloat(planet.longitude.toFixed(6)),
       house: planet.house,
       isRetrograde: planet.isRetrograde,
     }));
@@ -437,53 +491,44 @@ function formatNatalChartData(chartData: {
       const zodiacInfo = degreeToZodiacSign(cuspDegree);
       return {
         number: houseNumber,
-        label: `House ${houseNumber}`,
         sign: zodiacInfo.sign,
-        signKey: zodiacInfo.signKey,
-        cuspDegree: cuspDegree,
-        cuspDegreeFormatted: formatZodiacDegree(cuspDegree),
+        degree: formatZodiacDegree(zodiacInfo.degreeInSign),
+        cuspDegree: parseFloat(cuspDegree.toFixed(6)),
       };
     });
 
-    // Calculate aspects (basic implementation - can be enhanced)
-    const aspects: any[] = [];
-    // TODO: Implement aspect calculation if needed
-    // This would require calculating angles between planets and checking for aspects
-    // (conjunction, opposition, trine, square, sextile, etc.)
+    // Calculate aspects between planets
+    const aspects = calculateAspects(chartData.planets);
 
     // Extract chart angles
     const ascendantInfo = degreeToZodiacSign(chartData.houses.ascendant);
     const ascendant = {
-      degree: chartData.houses.ascendant,
-      degreeFormatted: formatZodiacDegree(chartData.houses.ascendant),
       sign: ascendantInfo.sign,
-      signKey: ascendantInfo.signKey,
+      degree: formatZodiacDegree(ascendantInfo.degreeInSign),
+      longitude: parseFloat(chartData.houses.ascendant.toFixed(6)),
     };
 
-    const mchiInfo = degreeToZodiacSign(chartData.houses.mc);
+    const mcInfo = degreeToZodiacSign(chartData.houses.mc);
     const midheaven = {
-      degree: chartData.houses.mc,
-      degreeFormatted: formatZodiacDegree(chartData.houses.mc),
-      sign: mchiInfo.sign,
-      signKey: mchiInfo.signKey,
+      sign: mcInfo.sign,
+      degree: formatZodiacDegree(mcInfo.degreeInSign),
+      longitude: parseFloat(chartData.houses.mc.toFixed(6)),
     };
 
     const descendantDegree = (chartData.houses.ascendant + 180) % 360;
     const descendantInfo = degreeToZodiacSign(descendantDegree);
     const descendant = {
-      degree: descendantDegree,
-      degreeFormatted: formatZodiacDegree(descendantDegree),
       sign: descendantInfo.sign,
-      signKey: descendantInfo.signKey,
+      degree: formatZodiacDegree(descendantInfo.degreeInSign),
+      longitude: parseFloat(descendantDegree.toFixed(6)),
     };
 
     const imumCoeliDegree = (chartData.houses.mc + 180) % 360;
     const imumCoeliInfo = degreeToZodiacSign(imumCoeliDegree);
     const imumCoeli = {
-      degree: imumCoeliDegree,
-      degreeFormatted: formatZodiacDegree(imumCoeliDegree),
       sign: imumCoeliInfo.sign,
-      signKey: imumCoeliInfo.signKey,
+      degree: formatZodiacDegree(imumCoeliInfo.degreeInSign),
+      longitude: parseFloat(imumCoeliDegree.toFixed(6)),
     };
 
     // Get Sun sign from planets data

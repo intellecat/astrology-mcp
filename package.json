@@ -24,6 +24,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.1",
     "@swisseph/node": "^1.0.4",
+    "geo-tz": "^8.1.4",
     "luxon": "^3.7.2",
     "node-geocoder": "^4.4.0",
     "zod": "^3.24.1"
