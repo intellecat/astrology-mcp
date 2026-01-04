@@ -40,7 +40,7 @@ Standard config works in most tools.
 If you want to modify the code or run from source:
 
 ```bash
-git clone https://github.com/your-username/astrology-mcp.git
+git clone https://github.com/intellecat/astrology-mcp.git
 cd astrology-mcp
 npm install
 npm run build
