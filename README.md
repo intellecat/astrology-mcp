@@ -25,7 +25,7 @@ A Model Context Protocol (MCP) server that provides astrological natal chart cal
 You can run the server directly using `npx` without installing anything:
 
 ```bash
-npx -y astrology-mcp
+npx -y @astrologer/astrology-mcp
 ```
 
 ### Configuring with Claude Desktop
@@ -40,7 +40,7 @@ Add to your Claude Desktop configuration file:
   "mcpServers": {
     "astrology": {
       "command": "npx",
-      "args": ["-y", "astrology-mcp"]
+      "args": ["-y", "@astrologer/astrology-mcp"]
     }
   }
 }
