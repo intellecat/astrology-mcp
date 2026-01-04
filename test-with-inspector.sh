@@ -1,18 +1,12 @@
 #!/bin/bash
 
-# Test the Astro MCP Server with MCP Inspector
-# This script launches the MCP Inspector to test the server
+# Test the Astrology MCP Server with MCP Inspector
+# Run with: ./test-with-inspector.sh
 
-echo "🚀 Starting MCP Inspector for Astro MCP Server"
-echo "=============================================="
-echo ""
-echo "Server path: $(pwd)/dist/index.js"
-echo ""
-echo "Once the inspector opens in your browser:"
-echo "1. Click 'Connect' to connect to the server"
-echo "2. You should see 2 tools listed:"
-echo "   - astro_calculate_natal_chart"
-echo "   - astro_get_coordinates"
+echo "🚀 Starting MCP Inspector for Astrology MCP Server"
+# ... (lines omitted)
+echo "   - astrology_calculate_natal_chart"
+echo "   - astrology_get_coordinates"
 echo "3. Try the test cases below"
 echo ""
 echo "Starting inspector..."

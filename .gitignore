@@ -6,3 +6,11 @@ npm-debug.log*
 .env
 .env.local
 *.tsbuildinfo
+
+# Local dev files
+.claude/
+_docs/
+_tests/
+*.tgz
+test_schema.ts
+test_zod_def.ts

@@ -12,7 +12,7 @@ import { getCoordinates } from "../services/geolocation.js";
 import { calculateNatalChart, formatNatalChartData } from "../services/chart-calculator.js";
 
 export const natalChartTool: Tool = {
-  name: "astro_calculate_natal_chart",
+  name: "astrology_calculate_natal_chart",
   description:
     "Calculate a complete natal chart (birth chart) based on date, time, and location. Returns detailed astrological information including: planetary positions in zodiac signs and houses with exact degrees, all 12 houses with their cusps, chart angles (Ascendant/Rising, Midheaven, Descendant, Imum Coeli), and major aspects between planets with orbs. Supports multiple house systems.",
   inputSchema: zodToJsonSchema(CalculateNatalChartArgsSchema),

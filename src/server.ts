@@ -13,7 +13,7 @@ import { tools, toolHandlers } from "./tools/index.js";
 // Create server instance
 export const server = new Server(
   {
-    name: "astro-mcp-server",
+    name: "astrology-mcp",
     version: "1.0.0",
   },
   {

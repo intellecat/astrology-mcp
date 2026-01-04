@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Astro MCP Server - Entry Point
+ * Astrology MCP Server - Entry Point
  *
  * A Model Context Protocol server for astrological calculations.
  * Provides tools for calculating natal charts and converting locations to coordinates.
@@ -13,7 +13,7 @@ import { server } from "./server.js";
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Astro MCP Server running on stdio");
+  console.error("Astrology MCP Server running on stdio");
 }
 
 main().catch((error) => {

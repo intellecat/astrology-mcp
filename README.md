@@ -1,4 +1,4 @@
-# Astro MCP Server
+# Astrology MCP Server
 
 A Model Context Protocol (MCP) server that provides astrological natal chart calculations. Built with TypeScript and the MCP SDK, this server enables AI assistants to calculate and interpret astrological birth charts based on date, time, and location.
 
@@ -25,7 +25,7 @@ A Model Context Protocol (MCP) server that provides astrological natal chart cal
 You can run the server directly using `npx` without installing anything:
 
 ```bash
-npx -y astro-mcp-server
+npx -y astrology-mcp
 ```
 
 ### Configuring with Claude Desktop
@@ -38,9 +38,9 @@ Add to your Claude Desktop configuration file:
 ```json
 {
   "mcpServers": {
-    "astro": {
+    "astrology": {
       "command": "npx",
-      "args": ["-y", "astro-mcp-server"]
+      "args": ["-y", "astrology-mcp"]
     }
   }
 }
@@ -51,8 +51,8 @@ Add to your Claude Desktop configuration file:
 If you want to modify the code or run from source:
 
 ```bash
-git clone https://github.com/your-username/astro-mcp-server.git
-cd astro-mcp-server
+git clone https://github.com/your-username/astrology-mcp.git
+cd astrology-mcp
 npm install
 npm run build
 ```
@@ -102,7 +102,7 @@ npm test
 
 ## MCP Tools
 
-### 1. astro_calculate_natal_chart
+### 1. astrology_calculate_natal_chart
 
 Calculate a complete natal chart based on birth data.
 
@@ -188,7 +188,7 @@ Calculate a complete natal chart based on birth data.
 }
 ```
 
-### 2. astro_get_coordinates
+### 2. astrology_get_coordinates
 
 Convert a location string to geographic coordinates.
 
@@ -210,7 +210,7 @@ Convert a location string to geographic coordinates.
 
 ```javascript
 {
-  "tool": "astro_calculate_natal_chart",
+  "tool": "astrology_calculate_natal_chart",
   "arguments": {
     "datetime": {
       "year": 1990,
@@ -231,7 +231,7 @@ Convert a location string to geographic coordinates.
 
 ```javascript
 {
-  "tool": "astro_calculate_natal_chart",
+  "tool": "astrology_calculate_natal_chart",
   "arguments": {
     "datetime": {
       "year": 1995,
@@ -250,7 +250,7 @@ Convert a location string to geographic coordinates.
 
 ```javascript
 {
-  "tool": "astro_get_coordinates",
+  "tool": "astrology_get_coordinates",
   "arguments": {
     "location": "Tokyo, Japan"
   }

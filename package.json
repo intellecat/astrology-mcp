@@ -1,11 +1,11 @@
 {
-  "name": "astro-mcp-server",
+  "name": "astrology-mcp",
   "version": "1.0.0",
   "description": "MCP server for astrological natal chart calculations",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "astro-mcp-server": "./dist/index.js"
+    "astrology-mcp": "./dist/index.js"
   },
   "files": [
     "dist"

@@ -11,7 +11,7 @@ import {
 import { getCoordinates } from "../services/geolocation.js";
 
 export const coordinatesTool: Tool = {
-  name: "astro_get_coordinates",
+  name: "astrology_get_coordinates",
   description:
     "Convert a location string (city, country) to geographic coordinates (latitude, longitude) using OpenStreetMap geocoding. Useful for obtaining coordinates before calculating a natal chart when only the city name is known.",
   inputSchema: zodToJsonSchema(GetCoordinatesArgsSchema),
