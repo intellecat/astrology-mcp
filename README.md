@@ -6,19 +6,11 @@ A Model Context Protocol (MCP) server that provides astrological natal chart cal
 
 ## Features
 
-- **TypeScript Implementation** - Full type safety with Zod schemas
-- **Latest MCP SDK** - Uses modern MCP best practices
-- **Input Validation** - Comprehensive validation with actionable error messages
-- **Complete Natal Charts** - Calculate detailed birth charts with:
-  - Planet positions in zodiac signs and degrees
-  - House placements for all planets
-  - Chart angles (Ascendant, Midheaven, Descendant, Imum Coeli)
-  - Major and minor aspects between planets with orbs
-  - Retrograde indicators
-- **Flexible Location Input** - Support for both coordinate input and city/country geocoding
-- **Multiple House Systems** - Placidus, Koch, Equal, Whole Sign, and more
-- **Free Geocoding** - Using OpenStreetMap (no API key required)
-- **Tool Annotations** - Proper readOnlyHint and idempotentHint annotations
+- **Accurate Calculations** - Powered by Swiss Ephemeris for high precision.
+- **Complete Natal Charts** - Detailed planet positions, houses, aspects, and chart angles.
+- **Flexible Location** - Support for coordinates or city names (free geocoding).
+- **Multiple House Systems** - Placidus, Koch, Whole Sign, and more.
+- **Modern Stack** - TypeScript, Zod validation, and latest MCP SDK.
 
 ## Quick Start
 
@@ -28,12 +20,9 @@ You can run the server directly using `npx` without installing anything:
 npx -y @astrologer/astrology-mcp
 ```
 
-### Configuring with Claude Desktop
+### Configuring with you MCP client
 
-Add to your Claude Desktop configuration file:
-
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+Standard config works in most tools.
 
 ```json
 {
@@ -119,6 +108,10 @@ Calculate a complete natal chart based on birth data.
 - `houseSystem` (string, optional): House system to use (default: "Placidus")
 
 **Returns:**
+
+<details>
+<summary>View response format</summary>
+
 ```json
 {
   "planets": [
@@ -187,6 +180,7 @@ Calculate a complete natal chart based on birth data.
   }
 }
 ```
+</details>
 
 ### 2. astrology_get_coordinates
 
@@ -196,6 +190,10 @@ Convert a location string to geographic coordinates.
 - `location` (string, required): Location in format "City, Country" (e.g., "London, UK")
 
 **Returns:**
+
+<details>
+<summary>View response format</summary>
+
 ```json
 {
   "latitude": 51.5074,
@@ -203,8 +201,12 @@ Convert a location string to geographic coordinates.
   "formattedAddress": "London, Greater London, England, UK"
 }
 ```
+</details>
 
 ## Example Usage with MCP Client
+
+<details>
+<summary>View usage examples</summary>
 
 ### Example 1: Calculate natal chart with coordinates
 
@@ -256,6 +258,8 @@ Convert a location string to geographic coordinates.
   }
 }
 ```
+
+</details>
 
 
 

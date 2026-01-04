@@ -1,6 +1,6 @@
 {
   "name": "@astrologer/astrology-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MCP server for astrological natal chart calculations",
   "type": "module",
   "main": "dist/index.js",
@@ -23,6 +23,10 @@
     "natal-chart",
     "horoscope"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/intellecat/astrology-mcp"
+  },
   "author": "",
   "license": "AGPL-3.0-only",
   "dependencies": {
