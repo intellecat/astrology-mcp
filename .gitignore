@@ -12,5 +12,3 @@ npm-debug.log*
 _docs/
 _tests/
 *.tgz
-test_schema.ts
-test_zod_def.ts
