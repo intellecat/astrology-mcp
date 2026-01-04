@@ -1,6 +1,6 @@
 {
   "name": "@astrologer/astrology-mcp",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "MCP server for astrological natal chart calculations",
   "type": "module",
   "main": "dist/index.js",
