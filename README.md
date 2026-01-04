@@ -1,13 +1,13 @@
 # Astro MCP Server
 
-A Model Context Protocol (MCP) server that provides astrological natal chart calculations. Built with TypeScript and the latest MCP SDK (v1.25.1), this server enables AI assistants to calculate and interpret astrological birth charts based on date, time, and location.
+A Model Context Protocol (MCP) server that provides astrological natal chart calculations. Built with TypeScript and the MCP SDK, this server enables AI assistants to calculate and interpret astrological birth charts based on date, time, and location.
 
 **🌟 Now powered by @swisseph/node** - Using the Swiss Ephemeris calculation engine for highly accurate astronomical calculations.
 
 ## Features
 
 - **TypeScript Implementation** - Full type safety with Zod schemas
-- **Latest MCP SDK (v1.25.1)** - Uses modern MCP best practices
+- **Latest MCP SDK** - Uses modern MCP best practices
 - **Input Validation** - Comprehensive validation with actionable error messages
 - **Complete Natal Charts** - Calculate detailed birth charts with:
   - Planet positions in zodiac signs and degrees
@@ -20,9 +20,39 @@ A Model Context Protocol (MCP) server that provides astrological natal chart cal
 - **Free Geocoding** - Using OpenStreetMap (no API key required)
 - **Tool Annotations** - Proper readOnlyHint and idempotentHint annotations
 
-## Installation
+## Quick Start
+
+You can run the server directly using `npx` without installing anything:
 
 ```bash
+npx -y astro-mcp-server
+```
+
+### Configuring with Claude Desktop
+
+Add to your Claude Desktop configuration file:
+
+**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "astro": {
+      "command": "npx",
+      "args": ["-y", "astro-mcp-server"]
+    }
+  }
+}
+```
+
+## Manual Installation (From Source)
+
+If you want to modify the code or run from source:
+
+```bash
+git clone https://github.com/your-username/astro-mcp-server.git
+cd astro-mcp-server
 npm install
 npm run build
 ```
@@ -30,7 +60,7 @@ npm run build
 ## Dependencies
 
 ### Runtime
-- `@modelcontextprotocol/sdk` (^1.25.1) - Latest MCP SDK
+- `@modelcontextprotocol/sdk` - Latest MCP SDK
 - `@swisseph/node` - Swiss Ephemeris calculation engine (high precision)
 - `luxon` - Timezone and date handling
 - `node-geocoder` - Location to coordinate conversion
@@ -227,25 +257,7 @@ Convert a location string to geographic coordinates.
 }
 ```
 
-## Configuring with Claude Desktop
 
-Add to your Claude Desktop configuration file:
-
-**MacOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "astro": {
-      "command": "node",
-      "args": ["/absolute/path/to/astro-mcp/dist/index.js"]
-    }
-  }
-}
-```
-
-**Note**: Make sure to run `npm run build` first to compile the TypeScript code to the `dist/` directory.
 
 ## House Systems Supported
 
