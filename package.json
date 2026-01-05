@@ -1,6 +1,6 @@
 {
   "name": "@astrologer/astrology-mcp",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "MCP server for astrological natal chart calculations",
   "type": "module",
   "main": "dist/index.js",
@@ -42,5 +42,8 @@
     "@types/node": "^22.10.2",
     "@types/node-geocoder": "^4.2.6",
     "typescript": "^5.7.2"
-  }
+  },
+  "trustedDependencies": [
+    "@swisseph/node"
+  ]
 }
