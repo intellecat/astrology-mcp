@@ -9,6 +9,7 @@ import type { CoordinatesResult } from "../types/index.js";
 // Initialize geocoder
 const geocoder = NodeGeocoder({
   provider: "openstreetmap",
+  osmServer: "https://nominatim.openstreetmap.org",
 });
 
 /**
