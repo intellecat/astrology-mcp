@@ -24,7 +24,29 @@ export async function getCoordinates(location: Location): Promise<CoordinatesRes
     };
   }
 
-  // Location is a string (city-country format)
+  // Location is a string
+  // First, check if it's a JSON string representing coordinates
+  if (typeof location === "string" && location.trim().startsWith("{")) {
+    try {
+      const parsed = JSON.parse(location);
+      if (
+        typeof parsed === "object" &&
+        parsed !== null &&
+        typeof parsed.latitude === "number" &&
+        typeof parsed.longitude === "number"
+      ) {
+        return {
+          latitude: parsed.latitude,
+          longitude: parsed.longitude,
+          formattedAddress: parsed.formattedAddress,
+        };
+      }
+    } catch (e) {
+      // Not a valid JSON string, ignore and proceed to geocoding
+    }
+  }
+
+  // Treat as address string (city-country format)
   try {
     const results = await geocoder.geocode(location);
     if (results && results.length > 0) {
